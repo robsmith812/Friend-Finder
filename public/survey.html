@@ -30,10 +30,133 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="question2"></label>
+                <label for="question2">Stay behind me! You think the shield is more imporant than the sword.</label>
+                <select class="form-control" id="question2">
+                    <option value="empty"></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="question3">Hero's never die! You like to provide vital support to keep your team
+                    alive.</label>
+                <select class="form-control" id="question3">
+                    <option value="empty"></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="question4">You can't hit what you can't see. You like to move around the battlefield
+                    swiftly.</label>
+                <select class="form-control" id="question4">
+                    <option value="empty"></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="question5">Long range is best range. You like to engage the ememy from a distance.</label>
+                <select class="form-control" id="question5">
+                    <option value="empty"></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="question6">Up close and personal. You like to fight in the face of danger.</label>
+                <select class="form-control" id="question6">
+                    <option value="empty"></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </div>
         </form>
+        <div>
+            <button id="submitBtn" type="submit">Submit</button>
+        </div>
+
+        <!-- Modal after Survey Completed -->
+        <div id="bestFriendModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title">Your Overwatch Hero</h1>
+                    </div>
+                    <div class="modal-body">
+                        <h2 id="bestFriend"></h2>
+                        <img id="bestFriendPhoto" src="#">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $("#submitBtn").on("click", function (event) {
+            event.preventDefault();
+            // Form validation
+            var valid = true;
+            if ($("#name").val() === "" || $("#photo").val() === "") {
+                valid = false;
+            } else if ($("#question1").val() === "empty" || $("#question2").val() === "empty" || $("#question3").val() === "empty" || $("#question4").val() === "empty" || $("#question5").val() === "empty" || $("#question6").val() === "empty" || $("#question7").val() === "empty" || $("#question8").val() === "empty" || $("#question9").val() === "empty" || $("#question10").val() === "empty") {
+                valid = false;
+            }
+            if (valid === true) {
+                var newUser = {
+                    name: $("#name").val().trim(),
+                    photo: $("#photo").val().trim(),
+                    scores: [
+                        $("#question1").val(),
+                        $("#question2").val(),
+                        $("#question3").val(),
+                        $("#question4").val(),
+                        $("#question5").val(),
+                        $("#question6").val(),
+                        $("#question7").val(),
+                        $("#question8").val(),
+                        $("#question9").val(),
+                        $("#question10").val()
+                    ]
+                };
+
+                var currentURL = window.location.origin;
+
+                // Ajax call for receiving response after POST req
+                $.post(currentURL + "/api/friends", newUser, function (data) {
+                    $("#bestFriend").text(data.name);
+                    $("#bestFriendPhoto").attr("src", data.photo);
+                    $("#bestFriendModal").modal("toggle");
+                });
+            } else {
+                // If a required field is missing, show alert
+                alert("Survey is incomplete!");
+            }
+        });
+    </script>
 </body>
 
 </html>
